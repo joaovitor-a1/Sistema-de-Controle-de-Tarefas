@@ -1,14 +1,15 @@
 from flask import Blueprint, render_template, request, redirect, url_for, flash, session
-from models import db, User, Tarefa
+# 🚨 CORREÇÃO: Importa a instância 'db' de src.app
+from src.app import db
+# 🚨 CORREÇÃO: Importa as classes de modelo de src.models
+from src.models import User, Tarefa
 from werkzeug.security import check_password_hash, generate_password_hash
 from functools import wraps
-
 
 tarefas_bp = Blueprint("tarefas_bp", __name__)
 
 STATUS_VALIDOS = ["A Fazer", "Em Progresso", "Concluída"]
 PRIORIDADES = ["Baixa", "Média", "Alta", "Crítica"]
-
 
 def login_required(f):
     @wraps(f)
@@ -19,8 +20,9 @@ def login_required(f):
         return f(*args, **kwargs)
     return decorated_function
 
-
+# Rota de Login
 @tarefas_bp.route("/", methods=["GET", "POST"])
+# ... (código da rota login) ...
 def login():
     if "user_id" in session:
         return redirect(url_for("tarefas_bp.dashboard"))
@@ -41,7 +43,7 @@ def login():
 
     return render_template("login.html")
 
-
+# Rota de Logout
 @tarefas_bp.route("/logout")
 @login_required
 def logout():
@@ -49,11 +51,11 @@ def logout():
     flash("Você foi desconectado.", "info")
     return redirect(url_for("tarefas_bp.login"))
 
-
+# Rota do Dashboard (Quadro Kanban)
 @tarefas_bp.route("/dashboard")
 @login_required
 def dashboard():
-    
+    # Consulta as tarefas do usuário logado e as organiza por colunas (status)
     tarefas_a_fazer = Tarefa.query.filter_by(
         usuario_id=session["user_id"], status="A Fazer"
     ).order_by(Tarefa.prioridade.desc()).all()
@@ -74,7 +76,7 @@ def dashboard():
         username=session["username"],
     )
 
-
+# Rota para Criar Nova Tarefa
 @tarefas_bp.route("/tarefa/nova", methods=["GET", "POST"])
 @login_required
 def nova_tarefa():
@@ -102,7 +104,7 @@ def nova_tarefa():
 
     return render_template("nova_tarefa.html", prioridades=PRIORIDADES)
 
-
+# Rota para Mudar o Status (Mover no Kanban)
 @tarefas_bp.route("/tarefa/mudar_status/<int:tarefa_id>/<string:novo_status>")
 @login_required
 def mudar_status(tarefa_id, novo_status):

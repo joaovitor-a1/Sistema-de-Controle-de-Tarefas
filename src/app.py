@@ -18,7 +18,8 @@ def create_app():
     db.init_app(app)
     migrate.init_app(app, db)
 
-    from routes import tarefas_bp
+    # Importação do Blueprint DEPOIS que o db foi inicializado
+    from src.routes import tarefas_bp
     app.register_blueprint(tarefas_bp)
 
     return app
