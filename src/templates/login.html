@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+
+{% block title %}Login - Sistema de Tarefas{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-6 col-lg-4">
+        <div class="card shadow-lg mt-5">
+            <div class="card-header bg-dark text-white text-center">
+                <h3 class="mb-0">Acessar Sistema de Tarefas</h3>
+            </div>
+            <div class="card-body">
+                
+                <form method="POST" action="{{ url_for('tarefas_bp.login') }}">
+                    
+                    <div class="mb-3">
+                        <label for="username" class="form-label">Nome de Usuário</label>
+                        <input type="text" 
+                               class="form-control" 
+                               id="username" 
+                               name="username" 
+                               required 
+                               autocomplete="username">
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="password" class="form-label">Senha</label>
+                        <input type="password" 
+                               class="form-control" 
+                               id="password" 
+                               name="password" 
+                               required 
+                               autocomplete="current-password">
+                    </div>
+                    
+                    <div class="d-grid gap-2">
+                        <button type="submit" class="btn btn-primary btn-lg">Entrar</button>
+                    </div>
+                </form>
+                
+                <hr>
+                
+                <div class="text-center">
+                    <p class="mb-0">Não tem uma conta?</p>
+                    <a href="{{ url_for('tarefas_bp.register') }}" class="btn btn-sm btn-outline-secondary mt-2">
+                        Criar Conta (Registro)
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

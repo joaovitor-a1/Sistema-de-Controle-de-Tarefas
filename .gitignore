@@ -13,30 +13,23 @@ env/
 .venv/
 
 # Flask-Migrate e Cache
-####################
-# Ignora os arquivos compilados da migração (dentro da pasta migrations)
-# O Alembic/Flask-Migrate rastreia os scripts .py, mas não os arquivos de cache
+
 migrations/__pycache__/
 .pytest_cache/
 
 # Dados, Logs e Instância
-####################
-# 🚨 IMPORTANTE: Ignora o arquivo de banco de dados SQLite
-# Se ele estiver sendo criado na raiz ou dentro da pasta 'instance'
+
 /instance/
 *.db
 /log/
 *.log
 
-# Artefatos do Build
-####################
+
 dist/
 build/
 *.egg-info/
 
-# Configurações de IDEs (Recomendado)
-####################
-# Visual Studio Code
+
 .vscode/
 
 # PyCharm

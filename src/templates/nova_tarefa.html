@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+
+{% block title %}Criar Nova Tarefa{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-8 col-lg-6">
+        <div class="card shadow-lg mt-5">
+            <div class="card-header bg-success text-white text-center">
+                <h3 class="mb-0">Adicionar Nova Tarefa</h3>
+            </div>
+            <div class="card-body">
+                
+                <form method="POST" action="{{ url_for('tarefas_bp.nova_tarefa') }}">
+                    
+                    <div class="mb-3">
+                        <label for="titulo" class="form-label">Título da Tarefa</label>
+                        <input type="text" 
+                               class="form-control" 
+                               id="titulo" 
+                               name="titulo" 
+                               required 
+                               maxlength="100">
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="descricao" class="form-label">Descrição</label>
+                        <textarea class="form-control" 
+                                  id="descricao" 
+                                  name="descricao" 
+                                  rows="4" 
+                                  required></textarea>
+                    </div>
+                    
+                    <input type="hidden" name="status" value="A Fazer">
+                    
+                    <div class="d-grid gap-2 mt-4">
+                        <button type="submit" class="btn btn-success btn-lg">
+                            Criar Tarefa
+                        </button>
+                    </div>
+                    
+                    <div class="text-center mt-3">
+                        <a href="{{ url_for('tarefas_bp.dashboard') }}" class="btn btn-sm btn-outline-secondary">
+                            Voltar para o Dashboard
+                        </a>
+                    </div>
+                </form>
+                
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

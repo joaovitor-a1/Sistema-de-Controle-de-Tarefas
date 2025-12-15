@@ -1,0 +1,89 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard - Minhas Tarefas{% endblock %}
+
+{% block content %}
+<h2 class="mb-4">Dashboard de Tarefas (Kanban)</h2>
+
+<div class="row">
+    
+    <div class="col-md-4">
+        <div class="card bg-light mb-3">
+            <div class="card-header bg-danger text-white">
+                <h4 class="mb-0">🔴 A Fazer</h4>
+            </div>
+            <div class="card-body">
+                
+                {% for tarefa in tarefas if tarefa.status == 'A Fazer' %}
+                <div class="card mb-2 shadow-sm">
+                    <div class="card-body">
+                        <h5 class="card-title">{{ tarefa.titulo }}</h5>
+                        <p class="card-text">{{ tarefa.descricao }}</p>
+                        <span class="badge bg-secondary mb-2">Criado em: {{ tarefa.data_criacao.strftime('%d/%m/%Y') }}</span>
+                        <div class="d-flex justify-content-between mt-2">
+                            <a href="{{ url_for('tarefas_bp.editar_tarefa', tarefa_id=tarefa.id) }}" class="btn btn-sm btn-outline-primary">Editar</a>
+                            <a href="{{ url_for('tarefas_bp.excluir_tarefa', tarefa_id=tarefa.id) }}" class="btn btn-sm btn-outline-danger">Excluir</a>
+                        </div>
+                    </div>
+                </div>
+                {% else %}
+                <p class="text-muted text-center">Nenhuma tarefa para fazer!</p>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-4">
+        <div class="card bg-light mb-3">
+            <div class="card-header bg-warning text-dark">
+                <h4 class="mb-0">🟡 Em Andamento</h4>
+            </div>
+            <div class="card-body">
+                
+                {% for tarefa in tarefas if tarefa.status == 'Em Andamento' %}
+                <div class="card mb-2 shadow-sm">
+                    <div class="card-body">
+                        <h5 class="card-title">{{ tarefa.titulo }}</h5>
+                        <p class="card-text">{{ tarefa.descricao }}</p>
+                        <span class="badge bg-secondary mb-2">Criado em: {{ tarefa.data_criacao.strftime('%d/%m/%Y') }}</span>
+                        <div class="d-flex justify-content-between mt-2">
+                            <a href="{{ url_for('tarefas_bp.editar_tarefa', tarefa_id=tarefa.id) }}" class="btn btn-sm btn-outline-primary">Editar</a>
+                            <a href="{{ url_for('tarefas_bp.excluir_tarefa', tarefa_id=tarefa.id) }}" class="btn btn-sm btn-outline-danger">Excluir</a>
+                        </div>
+                    </div>
+                </div>
+                {% else %}
+                <p class="text-muted text-center">Nenhuma tarefa em andamento.</p>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-4">
+        <div class="card bg-light mb-3">
+            <div class="card-header bg-success text-white">
+                <h4 class="mb-0">🟢 Concluída</h4>
+            </div>
+            <div class="card-body">
+                
+                {% for tarefa in tarefas if tarefa.status == 'Concluída' %}
+                <div class="card mb-2 shadow-sm border-success">
+                    <div class="card-body">
+                        <h5 class="card-title">{{ tarefa.titulo }}</h5>
+                        <p class="card-text">{{ tarefa.descricao }}</p>
+                        <span class="badge bg-secondary mb-2">Criado em: {{ tarefa.data_criacao.strftime('%d/%m/%Y') }}</span>
+                        <div class="d-flex justify-content-between mt-2">
+                            <a href="{{ url_for('tarefas_bp.editar_tarefa', tarefa_id=tarefa.id) }}" class="btn btn-sm btn-outline-primary">Editar</a>
+                            <a href="{{ url_for('tarefas_bp.excluir_tarefa', tarefa_id=tarefa.id) }}" class="btn btn-sm btn-outline-danger">Excluir</a>
+                        </div>
+                    </div>
+                </div>
+                {% else %}
+                <p class="text-muted text-center">Nenhuma tarefa concluída.</p>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+
+</div>
+{% endblock %}
