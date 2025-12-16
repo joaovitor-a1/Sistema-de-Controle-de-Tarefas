@@ -1,0 +1,45 @@
+
+name: Execução de Testes
+
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+
+jobs:
+  build:
+   
+    runs-on: ubuntu-latest
+    
+   
+    strategy:
+      matrix:
+        python-version: ["3.11"] 
+
+    
+    steps:
+   
+    - uses: actions/checkout@v4
+    
+   
+    - name: Set up Python ${{ matrix.python-version }}
+      uses: actions/setup-python@v5
+      with:
+        python-version: ${{ matrix.python-version }}
+    
+   
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+    
+
+    - name: Run Pytest
+      run: |
+        # Configura a variável de ambiente necessária para o Flask encontrar a aplicação
+        export FLASK_APP=src
+        # Roda o Pytest com o modo de módulo
+        python -m pytest
