@@ -18,22 +18,26 @@ def is_logged_in():
 
 @tarefas_bp.route("/register", methods=['GET', 'POST'])
 def register():
+    # Redireciona usuários já logados
     if is_logged_in():
         return redirect(url_for('tarefas_bp.dashboard'))
     
     if request.method == 'POST':
+        #Captura os dados enviados pelo formulário html
         username = request.form.get('username')
         password = request.form.get('password')
         confirm_password = request.form.get('confirm_password')
 
-       
+#REGRAS DE NEGÓCIO
+       # Verifica se o nome já existe no banco
         user = Usuario.query.filter_by(username=username).first()
         if user:
             flash('Nome de usuário já existe. Escolha outro.', 'danger')
+        #Valida a confirmação da senha
         elif password != confirm_password:
             flash('As senhas não coincidem.', 'danger')
         else:
-          
+          #Gera um hash, fazendo com que a senha não seja salva em formato de texto no banco de dados
             hashed_password = generate_password_hash(password, method='scrypt')
             
          
@@ -49,13 +53,14 @@ def register():
 @tarefas_bp.route("/", methods=['GET', 'POST'])
 @tarefas_bp.route("/login", methods=['GET', 'POST'])
 def login():
+    #se o usuário já estiver logado ele vai para o dashboard
     if is_logged_in():
         return redirect(url_for('tarefas_bp.dashboard'))
     
     if request.method == 'POST':
         username = request.form.get('username')
         password = request.form.get('password')
-        
+        #busca o usuário pelo nome fornecido
         user = Usuario.query.filter_by(username=username).first()
         
         # Verificação de usuário e senha
@@ -71,7 +76,7 @@ def login():
             flash('Nome de usuário ou senha inválidos.', 'danger')
             
     return render_template("login.html")
-
+#encerra a sessão do usuário
 @tarefas_bp.route("/logout")
 def logout():
     session.clear() 
@@ -79,9 +84,10 @@ def logout():
     return redirect(url_for('tarefas_bp.login'))
 
 
-
+#DASHBOARD
 @tarefas_bp.route("/dashboard")
 def dashboard():
+    #garante que apenas usuário logados possam ver as tarefas
     if not is_logged_in():
         flash('Você precisa estar logado para acessar esta página.', 'warning')
         return redirect(url_for('tarefas_bp.login'))
@@ -104,13 +110,13 @@ def nova_tarefa():
         status = request.form.get('status', 'A Fazer') 
         user_id = session['user_id']
         
-        
+        #cria a tarefa com os dados fornecidos
         nova = Tarefa(
             titulo=titulo,
             descricao=descricao,
             status=status,
             data_criacao=datetime.now(),
-            user_id=user_id
+            user_id=user_id #vinculação da tarefa ao usuário da mesma
         )
         db.session.add(nova)
         db.session.commit()
@@ -126,13 +132,13 @@ def editar_tarefa(tarefa_id):
         flash('Você precisa estar logado para editar tarefas.', 'warning')
         return redirect(url_for('tarefas_bp.login'))
 
-    
+    #busca a tarefa
     tarefa = Tarefa.query.filter_by(id=tarefa_id, user_id=session['user_id']).first()
     
     if not tarefa:
         flash('Tarefa não encontrada ou você não tem permissão para editá-la.', 'danger')
         return redirect(url_for('tarefas_bp.dashboard'))
-        
+        #atualiza a tarefa
     if request.method == 'POST':
         tarefa.titulo = request.form.get('titulo')
         tarefa.descricao = request.form.get('descricao')
@@ -156,7 +162,7 @@ def excluir_tarefa(tarefa_id):
     if not tarefa:
         flash('Tarefa não encontrada ou você não tem permissão para excluí-la.', 'danger')
         return redirect(url_for('tarefas_bp.dashboard'))
-        
+        #remove a tarefa do banco
     db.session.delete(tarefa)
     db.session.commit()
     flash('Tarefa excluída com sucesso!', 'success')

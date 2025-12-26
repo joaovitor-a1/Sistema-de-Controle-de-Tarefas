@@ -1,4 +1,4 @@
-from . import db # Importa o objeto db de src/__init__.py
+from . import db # Importa o objeto db de src/__init__.py/ Instância do SQL Alchemy
 from sqlalchemy.orm import relationship
 from datetime import datetime
 
@@ -6,10 +6,10 @@ from datetime import datetime
 
 class Usuario(db.Model):
     __tablename__ = 'usuarios'
-
+#Atributos do usuário (nome e senha)
     id = db.Column(db.Integer, primary_key=True)
-    username = db.Column(db.String(80), unique=True, nullable=False)
-    password_hash = db.Column(db.String(128), nullable=False)
+    username = db.Column(db.String(80), unique=True, nullable=False) #Impede que o mesmo usuário tenha 2 logins
+    password_hash = db.Column(db.String(128), nullable=False) #Campo obrigatório/ Armazena apenas o Hash da senha para segurança da mesma
     
     # Relação: 
     tarefas = relationship('Tarefa', backref='usuario', lazy=True, cascade="all, delete-orphan")

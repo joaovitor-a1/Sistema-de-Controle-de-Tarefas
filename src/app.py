@@ -13,13 +13,13 @@ from .models import Usuario, Tarefa
 
 def create_app():
    
-    basedir = os.path.abspath(os.path.dirname(__file__)) 
+    basedir = os.path.abspath(os.path.dirname(__file__)) #define o caminho da pasta onde está o arquivo
 
-    
+    #inicia a instância do flask
     app = Flask(
         __name__, 
-        instance_relative_config=True,
-        template_folder=os.path.join(basedir, 'templates') # <--- CORREÇÃO AQUI
+        instance_relative_config=True, #para o uso da pasta instance para o banco de dados
+        template_folder=os.path.join(basedir, 'templates') #localização dos arquivos html
     ) 
     
     
@@ -27,10 +27,10 @@ def create_app():
     # ----------------------------------------------------
     app.config["SECRET_KEY"] = "sua_chave_secreta_aqui" 
     
-    # Configuração do DB: Usa o caminho dentro da pasta 'instance'
+    # Configuração do banco de dados: Usa o caminho dentro da pasta 'instance'
     app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///" + os.path.join(app.instance_path, "tarefas.db")
     app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
-    app.permanent_session_lifetime = timedelta(minutes=40)
+    app.permanent_session_lifetime = timedelta(minutes=40) #tempo limite da sessão de um usuário para segurança
 
    
     db.init_app(app) 
@@ -47,4 +47,4 @@ def create_app():
     # ----------------------------------------------------
     app.register_blueprint(main_blueprint)
 
-    return app
+    return app #retorna o objeto app pronto para ser rodado com o comando flask run
