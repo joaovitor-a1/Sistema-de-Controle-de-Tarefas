@@ -30,7 +30,7 @@ def create_app():
     # Configuração do banco de dados: Usa o caminho dentro da pasta 'instance'
     app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///" + os.path.join(app.instance_path, "tarefas.db")
     app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
-    app.permanent_session_lifetime = timedelta(minutes=40) #tempo limite da sessão de um usuário para segurança
+    app.permanent_session_lifetime = timedelta(minutes=40) #tempo limite da sessão de um usuário logado no sistema
 
    
     db.init_app(app) 
